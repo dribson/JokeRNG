@@ -619,8 +619,9 @@ class JokeR:
         max = int(self.packMax.get())
         lst = list(range(1, max+1))
         random.shuffle(lst)
-        lst.sort()
-        self.packText.set(lst[0:num])
+        nums = lst[0:num]
+        nums.sort()
+        self.packText.set(nums)
         pass
 
 def GuiTest():
