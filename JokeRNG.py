@@ -498,17 +498,9 @@ class JokeR:
 
     def PickShopAction(self, *args):
         if(self.actionsShop.get() > 0): # Calculate a random shop action
-            randShop = random.randint(0, 5)
-            if(randShop == 0 and self.currentShopSlots.get() > 0):
-                # Buy/BuyUse Card From Slot
-                randPurchaseSlot = random.randint(1, self.currentShopSlots.get())
-                if random.randint(1, 100) <= weightBuyUse:
-                    self.step.set(f"Action {self.currentAction.get()}: Purchase AND USE the Item in Shop Slot {randPurchaseSlot}")
-                else:
-                    self.step.set(f"Action {self.currentAction.get()}: Purchase the Item in Shop Slot {randPurchaseSlot} WITHOUT USE")
-                self.currentShopSlots.set(self.currentShopSlots.get() - 1)
+            randShop = random.randint(0,5)
 
-            elif randShop == 1 and not self.boughtVoucher.get():
+            if randShop == 1 and not self.boughtVoucher.get():
                 # Buy Voucher
                 self.boughtVoucher.set(True)
                 self.step.set(f"Action {self.currentAction.get()}: Purchase the Voucher")
@@ -542,6 +534,17 @@ class JokeR:
                 else:
                     self.step.set(f"Action {self.currentAction.get()}: Use the Consumable currently in Consumable Slot #{randConsumable}, if currently possible, otherwise skip this step")
                 self.ownedConsumables.set(self.ownedConsumables.get() - 1)
+            
+            elif (randShop == 0 and self.currentShopSlots.get() > 0) or (self.currentShopSlots.get() > 0):
+                # Buy/BuyUse Card From Slot
+                if randShop != 0:
+                    print("buy item without randshop 0")
+                randPurchaseSlot = random.randint(1, self.currentShopSlots.get())
+                if random.randint(1, 100) <= weightBuyUse:
+                    self.step.set(f"Action {self.currentAction.get()}: Purchase AND USE the Item in Shop Slot {randPurchaseSlot}")
+                else:
+                    self.step.set(f"Action {self.currentAction.get()}: Purchase the Item in Shop Slot {randPurchaseSlot} WITHOUT USE")
+                self.currentShopSlots.set(self.currentShopSlots.get() - 1)
 
             elif (self.currentShopSlots.get() == 0 and self.boughtVoucher.get() == True and self.currentPackSlots.get() == 0 and self.shopRerolls.get() == 0 and self.ownedConsumables.get() == 0 and self.ownedJokers.get() == 0):
                 # Failsale if no possible actions can be taken
@@ -550,8 +553,10 @@ class JokeR:
                 self.gameState.set(3)
                 self.enteredShop.set(False)
             else:
-                print("Couldn't find anything to do on this shop, retrying...")
-                self.PickShopAction()
+                print("Couldn't find anything to do on this shop, exiting this shop")
+                self.gameState.set(3)
+                self.step.set(f"Action {self.currentAction.get()}: Exit This Shop")
+                self.enteredShop.set(False)
             self.actionsShop.set(self.actionsShop.get() - 1)
         else: # If no remaining actions, exit the shop and continue to blind selection
             self.gameState.set(3)
