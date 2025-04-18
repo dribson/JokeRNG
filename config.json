@@ -1,0 +1,15 @@
+{
+	"maxShopActions":5,
+	"maxShopRolls":3,
+	
+	"defaultDeck":0,
+	
+	"weightSkipBlind":10,
+	"weightRerollBoss":10,
+	"weightBuyUse":50,
+	"weightBuyTwoFromPack":50,
+	"weightSellJoker":3,
+	"weightUseSellConsumable":40,
+	"weightSellConsumable":20,
+	"weightDiscard":45
+}

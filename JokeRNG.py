@@ -2,23 +2,26 @@ import random
 import tkinter
 from tkinter import *
 from tkinter import ttk
+import json
 
 handSize = 8
 playing = True
 obtainedConsumable = False
+maxJokerSlots = 5
+maxConsumableSlots = 2
+maxShopSlots = 2
+defaultDeck = 0
+
 maxShopActions = 5
 maxShopRolls = 3
 weightSkipBlind = 10
 weightRerollBoss = 10
 weightBuyUse = 50
 weightBuyTwoFromPack = 50
-weightSellJoker = 4
+weightSellJoker = 30
 weightUseSellConsumable = 40
 weightSellConsumable = 20
-weightDiscard = 35
-maxJokerSlots = 5
-maxConsumableSlots = 2
-maxShopSlots = 2
+weightDiscard = 45
 
 def main():
     global playing
@@ -394,45 +397,46 @@ class JokeR:
             self.currentAction.set(1)
             # Generate which deck to use
             # Set defaults for variables based on deck chosen
-            randomDeck = random.randint(0, 14)
-            randomDeck = 13 # TODO testing just with plasma deck
-            if(randomDeck == 0):
+            randomDeck = random.randint(1, 15)
+            if (0 < defaultDeck < 16):
+                randomDeck = defaultDeck
+            if(randomDeck == 1):
                 self.step.set(f"Action {self.currentAction.get()}: Select the Red Deck")
-            elif(randomDeck == 1):
-                self.step.set(f"Action {self.currentAction.get()}: Select the Blue Deck")
             elif(randomDeck == 2):
-                self.step.set(f"Action {self.currentAction.get()}: Select the Yellow Deck")
+                self.step.set(f"Action {self.currentAction.get()}: Select the Blue Deck")
             elif(randomDeck == 3):
-                self.step.set(f"Action {self.currentAction.get()}: Select the Green Deck")
+                self.step.set(f"Action {self.currentAction.get()}: Select the Yellow Deck")
             elif(randomDeck == 4):
+                self.step.set(f"Action {self.currentAction.get()}: Select the Green Deck")
+            elif(randomDeck == 5):
                 self.step.set(f"Action {self.currentAction.get()}: Select the Black Deck")
                 self.jokerSize.set(6)
-            elif(randomDeck == 5):
+            elif(randomDeck == 6):
                 self.step.set(f"Action {self.currentAction.get()}: Select the Magic Deck")
                 self.ownedConsumables.set(2)
                 self.consumableSize.set(3)
-            elif(randomDeck == 6):
+            elif(randomDeck == 7):
                 self.step.set(f"Action {self.currentAction.get()}: Select the Nebula Deck")
                 self.consumableSize.set(1)
-            elif(randomDeck == 7):
+            elif(randomDeck == 8):
                 self.step.set(f"Action {self.currentAction.get()}: Select the Ghost Deck")
                 self.ownedConsumables.set(1)
-            elif(randomDeck == 8):
-                self.step.set(f"Action {self.currentAction.get()}: Select the Abandoned Deck")
             elif(randomDeck == 9):
-                self.step.set(f"Action {self.currentAction.get()}: Select the Checkered Deck")
+                self.step.set(f"Action {self.currentAction.get()}: Select the Abandoned Deck")
             elif(randomDeck == 10):
+                self.step.set(f"Action {self.currentAction.get()}: Select the Checkered Deck")
+            elif(randomDeck == 11):
                 self.step.set(f"Action {self.currentAction.get()}: Select the Zodiac Deck")
                 self.shopSize.set(3)
-            elif(randomDeck == 11):
+            elif(randomDeck == 12):
                 self.step.set(f"Action {self.currentAction.get()}: Select the Painted Deck")
                 self.handSize.set(10)
                 self.jokerSize.set(4)
-            elif(randomDeck == 12):
-                self.step.set(f"Action {self.currentAction.get()}: Select the Anaglyph Deck")
             elif(randomDeck == 13):
-                self.step.set(f"Action {self.currentAction.get()}: Select the Plasma Deck")
+                self.step.set(f"Action {self.currentAction.get()}: Select the Anaglyph Deck")
             elif(randomDeck == 14):
+                self.step.set(f"Action {self.currentAction.get()}: Select the Plasma Deck")
+            elif(randomDeck == 15):
                 self.step.set(f"Action {self.currentAction.get()}: Select the Erratic Deck")
 
             # Go to selecting blind game state
@@ -541,9 +545,9 @@ class JokeR:
                     print("buy item without randshop 0")
                 randPurchaseSlot = random.randint(1, self.currentShopSlots.get())
                 if random.randint(1, 100) <= weightBuyUse:
-                    self.step.set(f"Action {self.currentAction.get()}: Purchase AND USE the Item in Shop Slot {randPurchaseSlot}")
+                    self.step.set(f"Action {self.currentAction.get()}: Purchase (Consumable: AND USE) the Item in Shop Slot {randPurchaseSlot}")
                 else:
-                    self.step.set(f"Action {self.currentAction.get()}: Purchase the Item in Shop Slot {randPurchaseSlot} WITHOUT USE")
+                    self.step.set(f"Action {self.currentAction.get()}: Purchase (Consumable: WITHOUT USE) the Item in Shop Slot {randPurchaseSlot}")
                 self.currentShopSlots.set(self.currentShopSlots.get() - 1)
 
             elif (self.currentShopSlots.get() == 0 and self.boughtVoucher.get() == True and self.currentPackSlots.get() == 0 and self.shopRerolls.get() == 0 and self.ownedConsumables.get() == 0 and self.ownedJokers.get() == 0):
@@ -659,6 +663,24 @@ def GuiTest():
     JokeR(root)
     root.mainloop()
 
+def LoadJson():
+    with open('config.json', 'r') as config_file:
+        data = json.load(config_file)
+    global maxShopActions, maxShopRolls, defaultDeck, weightSkipBlind, weightRerollBoss, weightBuyUse, weightBuyTwoFromPack, weightSellJoker, weightUseSellConsumable, weightSellConsumable, weightDiscard
+
+    maxShopActions = data['maxShopActions'] # Maximum number of possible actions to take per shop, excluding rerolls
+    maxShopRolls = data['maxShopRolls'] # Maximum number of possible rerolls per shop
+    defaultDeck = data['defaultDeck'] # Which deck to pick, ranging from 1-15. Leave as 0 for random deck. Red Deck = 1, Blue Deck = 2, Erratic Deck = 15, etc.
+    weightSkipBlind = data['weightSkipBlind'] # Percent chance to skip a Small or Big Blind
+    weightRerollBoss = data['weightRerollBoss'] # Percent chance to reroll a Boss Blind (if available)
+    weightBuyUse = data['weightBuyUse'] # Percent chance to Buy+Use a Consumable from the shop, instead of just buying it
+    weightBuyTwoFromPack = data['weightBuyTwoFromPack'] # Percent chance to take 2 cards from a Mega pack purchased from the shop
+    weightSellJoker = data['weightSellJoker'] # Percent chance, per owned Joker, to sell an owned Joker as any action
+    weightUseSellConsumable = data['weightUseSellConsumable'] # Percent chance to Use or Sell a currently owned Consumable as any action
+    weightSellConsumable = data['weightSellConsumable'] # Percent chance to Sell a Consumable instead of using
+    weightDiscard = data['weightDiscard'] # Percent chance to Discard and Hand instead of Playing it
+
 if __name__ == "__main__":
+    LoadJson()
     GuiTest()
     #main()
