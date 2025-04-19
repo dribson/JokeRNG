@@ -2,7 +2,7 @@
 A silly little program that tells you how to play Balatro, entirely dictated by RNG
 
 ## Info
-Want to play Balatro, without any of the strenuous thinking involved? Then JokeRNG is the tool for you! JokeRNG will tell you exactly which action to take at the click of a button. This tool does *not* hook into Balatro in any way, shape, or form, some some information must be updated manually for the tool to function properly.
+Want to play Balatro, without any of the strenuous thinking involved? Then JokeRNG is the tool for you! JokeRNG will tell you exactly which action to take at the click of a button. This tool does *not* hook into Balatro in any way, shape, or form, so some information must be updated manually for the tool to function properly.
 
 JokeRNG was developed since my brother wanted to experiment with playing Balatro where everything is random. I developed a command line version of this tool, but decided I wanted it to look better, after which I turned this into a GUI program via TKinter library. The command line version is still in the code, but inaccessable and not up to date.
 
