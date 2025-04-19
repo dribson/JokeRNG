@@ -2,7 +2,7 @@
 A silly little program that tells you how to play Balatro, entirely dictated by RNG
 
 ## Info
-Want to play Balatro, without any of the strenuous thinking involved. JokeRNG is the tool for you! JokeRNG will tell you exactly which action to take at the click of a button. This tool does *not* hook into Balatro in any way, shape, or form, some some information must be kept updated manually.
+Want to play Balatro, without any of the strenuous thinking involved? Then JokeRNG is the tool for you! JokeRNG will tell you exactly which action to take at the click of a button. This tool does *not* hook into Balatro in any way, shape, or form, some some information must be updated manually for the tool to function properly.
 
 JokeRNG was developed since my brother wanted to experiment with playing Balatro where everything is random. I developed a command line version of this tool, but decided I wanted it to look better, after which I turned this into a GUI program via TKinter library. The command line version is still in the code, but inaccessable and not up to date.
 
@@ -17,6 +17,8 @@ When you win a blind in Balatro, click the **Calculate Next Action (Blind Won)**
 
 If an action requires the use of selecting cards, such as using a Tarot Card or opening a Pack, use the **Manual Card Selector** at the bottom of the application to determine which selections are to be made
 
+The tool updates specific variables for each deck, such as hand size, Joker slots, or number of owned consumables. Since JokeRNG does not connect to Balatro directly, these variabes can and must be modified by the player in order for certain actions to be made available in random calculation. This includes selling Jokers, using Consumables, and selecting cards from the hand.
+
 ## Configuration
 The app comes with a configuation file 'config.json' that allows for some amount of customization in terms of how likely certain actions are to occur.
 
@@ -25,6 +27,8 @@ The app comes with a configuation file 'config.json' that allows for some amount
 **maxShopRolls**: The maximum number of times a shop can be rerolled. This does not use an action. The total number of rerolls per shop will be randomized between 0 and this number. *Default*: 3
 
 **defaultDeck**: If this is set between 1 and 15, will pick the associated deck. See the [Balatro Wiki](https://balatrogame.fandom.com/wiki/Decks) page for a refresher. Otherwise, picks a random deck out of all 15. *Default*: 0
+
+**alwaysFiveCards**: Whether the tool should always pick 5 cards when Playing or Discarding a Hand. *Default*: False
 
 **weightSkipBlind**: The percent chance that the Small Blind or the Big Blind must be skipped. *Default*: 10
 

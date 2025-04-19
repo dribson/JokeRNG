@@ -11,6 +11,7 @@ maxJokerSlots = 5
 maxConsumableSlots = 2
 maxShopSlots = 2
 defaultDeck = 0
+alwaysFiveCards = False
 
 maxShopActions = 5
 maxShopRolls = 3
@@ -461,6 +462,9 @@ class JokeR:
                 self.ownedConsumables.set(self.ownedConsumables.get() - 1)
             else: # Play (Or Discard)
                 cardsAmount = [1,2,3,4,4,5,5,5,5,5,5,5,5,5,5,5,5,5,5] # weight heavily for higher amounts played/discarded
+                if(str.lower(alwaysFiveCards) == "true"):
+                    cardsAmount = [5]
+                    print("True")
                 random.shuffle(cardsAmount)
                 amountCards = cardsAmount[0]
                 lstCards = list(range(1, self.handSize.get() + 1))
@@ -666,11 +670,12 @@ def GuiTest():
 def LoadJson():
     with open('config.json', 'r') as config_file:
         data = json.load(config_file)
-    global maxShopActions, maxShopRolls, defaultDeck, weightSkipBlind, weightRerollBoss, weightBuyUse, weightBuyTwoFromPack, weightSellJoker, weightUseSellConsumable, weightSellConsumable, weightDiscard
+    global maxShopActions, maxShopRolls, defaultDeck, alwaysFiveCards, weightSkipBlind, weightRerollBoss, weightBuyUse, weightBuyTwoFromPack, weightSellJoker, weightUseSellConsumable, weightSellConsumable, weightDiscard
 
     maxShopActions = data['maxShopActions'] # Maximum number of possible actions to take per shop, excluding rerolls
     maxShopRolls = data['maxShopRolls'] # Maximum number of possible rerolls per shop
     defaultDeck = data['defaultDeck'] # Which deck to pick, ranging from 1-15. Leave as 0 for random deck. Red Deck = 1, Blue Deck = 2, Erratic Deck = 15, etc.
+    alwaysFiveCards = data['alwaysFiveCards'] # If the tool should always pick 5 cards when playing or discarding a hand.
     weightSkipBlind = data['weightSkipBlind'] # Percent chance to skip a Small or Big Blind
     weightRerollBoss = data['weightRerollBoss'] # Percent chance to reroll a Boss Blind (if available)
     weightBuyUse = data['weightBuyUse'] # Percent chance to Buy+Use a Consumable from the shop, instead of just buying it

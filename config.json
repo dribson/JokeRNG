@@ -3,6 +3,7 @@
 	"maxShopRolls":3,
 	
 	"defaultDeck":0,
+	"alwaysFiveCards":"False",
 	
 	"weightSkipBlind":10,
 	"weightRerollBoss":10,
